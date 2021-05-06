@@ -1,22 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import ListComponent from '../ListComponent';
 
 const ShowListComponent = (props) => {
-    const { title, description } = props;
-    //map mi restituisce un array trasformato
+    // restituisco listcomponet che è il componente che utilizzo per stampare a schermo i dati
+    const {taskList, deleteTask} = props;
     return (
-        <>
-            <div className={"container"}>
-                <div className={"row"}>
-                    <div className={"col-12"}>
-                        <p>task: {title}</p>
-                        <p>descrizione task: {description}</p>
-                    </div>
-                </div>
-            </div>
-        </>
+        <div>
+            {taskList.length > 0 && taskList.map((current, index) => {
+                return <ListComponent key={index} task={current} index={index} deleteTask={deleteTask}/>
+            })}
+        </div>
     );
 }
 
 export default ShowListComponent;
-
-//per passare dati dal figlio al padre il padre deve passare al figlio una callback e il figlio la deve innvocare
