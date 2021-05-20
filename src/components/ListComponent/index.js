@@ -8,19 +8,28 @@ import './index.css';
 const ListComponent = (props) => {
     const [edit, setEdit] = useState(false);
     
-    const { task, deleteTask, index } = props;
+    const { task, deleteTask, editTask, index, restoreTask } = props;
     //map mi restituisce un array trasformato
 
     const handleDelete = () =>{
         deleteTask(index);
     }
 
-    const handleEdit = () =>{  
+    const setEditMode = () =>{  
       setEdit(true);  
     }
 
-    const handleSetEdit = () =>{
+    const handleEdit = (newTask) =>{
+        editTask(newTask, index);
         setEdit(false);
+    }
+
+    const handleDiscard = () =>{
+        setEdit(false);
+    }
+
+    const handleRestore = () =>{
+        restoreTask({task, index});
     }
 
 
@@ -29,14 +38,16 @@ const ListComponent = (props) => {
             <div className={"container"}>
                 <div className={"row mb-4"}>
                     <div className={"col-8"}>
-                            {edit ? <EditComponent discard={handleSetEdit} taskToEdit={task} edit={edit}/> : <p className={"task"}>{task}</p>}
+                            {edit ? <EditComponent discard={handleDiscard} taskToEdit={task} edit={handleEdit}/> : <p className={"task"}>{task}</p>}
                     </div>
 
                     {!edit ? <div className={"col-4 d-flex align-items-center"}>
                         {/*importiamo il componente per il button passiamo padre figlio le props text e action*/}
-                        {<ButtonComponent text={"delete"} action={handleDelete}/>}
+                        {!!deleteTask && <ButtonComponent text={"delete"} action={handleDelete}/>}
                         {/*aggiungiamo sempre il componente button  per editare il task*/}
-                        {<button className={"button"} onClick={handleEdit}>edit</button>}
+                        {/*<button className={"button"} onClick={handleEdit}>edit</button>*/}
+                        {!!editTask && <ButtonComponent text={"edit"} action={setEditMode}/>}
+                        {!!restoreTask && <ButtonComponent text={"restore"} action={handleRestore}/>}
                     </div>: null}
                 </div>
             </div>
